@@ -5,7 +5,7 @@ class MathHelper:
         Just for practicing with packages, pip, pyproject etc.
     """
     
-    def plus(a: int, b: int) -> int:
+    def plus(self, a: int, b: int) -> int:
         """Plus function
 
         Args:
@@ -17,7 +17,7 @@ class MathHelper:
         """
         return a + b
 
-    def minus(a: int, b: int) -> int:
+    def minus(self, a: int, b: int) -> int:
         """Minus function
 
         Args:
@@ -29,7 +29,7 @@ class MathHelper:
         """
         return a - b
     
-    def multiply(a: int, b: int) -> int:
+    def multiply(self, a: int, b: int) -> int:
         """Multiply function
 
         Args:
@@ -41,7 +41,7 @@ class MathHelper:
         """
         return a * b
     
-    def division(a: int, b: int) -> float:
+    def division(self, a: int, b: int) -> float:
         """Division function
 
         Args:
