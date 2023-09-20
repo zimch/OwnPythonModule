@@ -1,6 +1,9 @@
 [project]
 name = "my_module"
 version = "0.1.1"
+dependencies = [
+    "click"
+]
 
 [build-system]
 requires = ["setuptools"]
