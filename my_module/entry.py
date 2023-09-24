@@ -25,6 +25,3 @@ def app():
     except:
         print("Что-то не так :(")
         
-        
-# if __name__ == "__main__":
-#     app()

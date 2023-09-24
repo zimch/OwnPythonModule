@@ -1,10 +1,17 @@
-[project]
-name = "my_module"
-version = "0.1.1"
-dependencies = [
-    "click"
+[tool.poetry]
+name = "my-package"
+version = "0.1.0"
+description = "Super math package"
+
+license = "MIT"
+
+authors = [
+    "zimch"
 ]
 
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+[tool.poetry.dependencies]
+# просто так :)
+python = ">=3.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
