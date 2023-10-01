@@ -21,28 +21,28 @@ class Window(QMainWindow):
         self.init_ui()
     
     def init_ui(self):    
-        self._input_one = QLineEdit()
-        self._input_two = QLineEdit()
+        self.input_one = QLineEdit()
+        self.input_two = QLineEdit()
         
-        self._combobox = QComboBox()
-        self._combobox.addItems(['+', '-', '/', "*"])
+        self.combobox = QComboBox()
+        self.combobox.addItems(['+', '-', '/', "*"])
 
-        self._btn = QPushButton("Count", self)
-        self._btn.clicked.connect(self.count_math)
+        self.btn = QPushButton("Count", self)
+        self.btn.clicked.connect(self.count_math)
         
-        self._result = QLabel()
+        self.result = QLabel()
 
-        self._layout = QVBoxLayout()
-        self._layout.addWidget(self._input_one)
-        self._layout.addWidget(self._input_two)
-        self._layout.addWidget(self._combobox)
-        self._layout.addWidget(self._btn)
-        self._layout.addWidget(self._result)
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.input_one)
+        self.layout.addWidget(self.input_two)
+        self.layout.addWidget(self.combobox)
+        self.layout.addWidget(self.btn)
+        self.layout.addWidget(self.result)
 
-        _container = QWidget()
-        _container.setLayout(self._layout)
+        container = QWidget()
+        container.setLayout(self.layout)
 
-        self.setCentralWidget(_container)
+        self.setCentralWidget(container)
 
         self.setGeometry(300, 300, 290, 150)
         self.setWindowTitle('Math Helper')
@@ -63,14 +63,14 @@ class Window(QMainWindow):
         try:
             match self._combobox.currentText():
                 case '+':
-                    self._result.setText(str(helper.plus(num_one, num_two)))
+                    self.result.setText(str(helper.plus(num_one, num_two)))
                 case '-':
-                    self._result.setText(str(helper.minus(num_one, num_two)))
+                    self.result.setText(str(helper.minus(num_one, num_two)))
                 case '*':
-                    self._result.setText(str(helper.multiply(num_one, num_two)))
+                    self.result.setText(str(helper.multiply(num_one, num_two)))
                 case '/':
-                    self._result.setText(str(helper.division(num_one, num_two)))
+                    self.result.setText(str(helper.division(num_one, num_two)))
                     
         except:
-            self._result.setText('Some problem...')
+            self.result.setText('Some problem...')
     
