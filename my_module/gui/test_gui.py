@@ -10,19 +10,13 @@ class TestGUI:
     def test_warning(self, qtbot):
         # app = Application([])
         window = Window()
-        window.setAttribute(qt_api.Qt.WA_DontShowOnScreen, True)
         window.show()
         qtbot.addWidget(window)
         
-        window._input_one.clear()
-        window._input_one.setText("2")
+        window.input_one.setText("2")
+        window.input_two.setText("2")
+        window.combobox.setCurrentText('+')
         
-        window._input_two.clear()
-        window._input_two.setText("2")
+        qtbot.mouseClick(window.btn, qt_api.QtCore.Qt.MouseButton.LeftButton)
         
-        window._combobox.clear()
-        window._combobox.setCurrentText('+')
-        
-        window._btn.click()
-        
-        assert window._result.text() == "4"
+        assert window.result.text() == "4"

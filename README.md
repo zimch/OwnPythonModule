@@ -16,10 +16,12 @@
 
 Для тестирования используем `pytest`
 
-Для запуска тестов выполнить `pytests -q my_module/module_test.py`
+Для запуска тестов выполнить `pytest`
 
 Успешный вывод:
 ```bash
-.... [100%]
-4 passed in 0.01s
+my_module\test_module.py ....                                                                                                                                                  [ 80%]
+my_module\gui\test_gui.py .                                                                                                                                                    [100%]
+
+========== 5 passed in 0.23s ==========
 ```

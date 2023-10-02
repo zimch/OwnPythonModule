@@ -55,13 +55,14 @@ class Window(QMainWindow):
         helper = MathHelper()
         
         try:
-            num_one = int(self._input_one.text())
-            num_two = int(self._input_two.text())
+            num_one = int(self.input_one.text())
+            num_two = int(self.input_two.text())
         except:
-            self._result.setText('Some problem...')
+            print('lalala')
+            self.result.setText('Some problem...')
         
         try:
-            match self._combobox.currentText():
+            match self.combobox.currentText():
                 case '+':
                     self.result.setText(str(helper.plus(num_one, num_two)))
                 case '-':
@@ -72,5 +73,6 @@ class Window(QMainWindow):
                     self.result.setText(str(helper.division(num_one, num_two)))
                     
         except:
+            print('lalala1')
             self.result.setText('Some problem...')
     
