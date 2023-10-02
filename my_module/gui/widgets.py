@@ -58,7 +58,6 @@ class Window(QMainWindow):
             num_one = int(self.input_one.text())
             num_two = int(self.input_two.text())
         except:
-            print('lalala')
             self.result.setText('Some problem...')
         
         try:
@@ -73,6 +72,5 @@ class Window(QMainWindow):
                     self.result.setText(str(helper.division(num_one, num_two)))
                     
         except:
-            print('lalala1')
             self.result.setText('Some problem...')
     
