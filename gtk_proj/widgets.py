@@ -20,6 +20,10 @@ class Window(Gtk.ApplicationWindow):
         self.ax = self.fig.add_subplot()
         self.line = None
 
+        color = (0.96, 0.96, 0.96)
+        self.fig.set_facecolor(color)
+        self.ax.set_facecolor(color)
+
         sw = Gtk.ScrolledWindow(margin_top=10, margin_bottom=10,
                             margin_start=10, margin_end=10)
 
