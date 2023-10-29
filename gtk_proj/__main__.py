@@ -4,6 +4,7 @@ gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
 from .widgets import Window
 
+
 class Application(Gtk.Application):
 
     def on_activate(self, _):
@@ -15,7 +16,7 @@ class Application(Gtk.Application):
         self.connect('activate', self.on_activate)
 
 
-app = Application(application_id='org.matplotlib.examples.EmbeddingInGTK4')
+app = Application(application_id='ru.zimch')
 app.connect('activate', app.on_activate)
 
 

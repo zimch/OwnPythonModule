@@ -1,37 +1,45 @@
 from gi.repository import Gtk
-
 from matplotlib.backends.backend_gtk4agg import \
     FigureCanvasGTK4Agg as FigureCanvas
 from matplotlib.figure import Figure
-import matplotlib.animation as animation
-import numpy as np
-
+from .tree import view
 from .model import PlotData
 
+
+class Notebook(Gtk.Notebook):
+    pass
+
+class Confirmation(Gtk.MessageDialog):
+    def __init__(self):
+        Gtk.MessageDialog.__init__(self)
+        self.set_markup('<b>Вы уверены?</b>')
+        self.add_button('да', 1)
+        self.add_button('нет', 0)
 
 class Window(Gtk.ApplicationWindow):
     def __init__(self, *args, **kwargs):
         Gtk.ApplicationWindow.__init__(self, *args, **kwargs)
         app = kwargs['application']
 
-        self.is_anim_active = False
+        self.notebook = Notebook()
 
-        self.fig = Figure(figsize=(5, 4), dpi=100, constrained_layout=False)
-        self.ax = self.fig.add_subplot()
+        intro = Gtk.ScrolledWindow()
+        box = Gtk.Box()
+        tab_label = Gtk.Label()
+        tab_label.set_text("График")
+        self.notebook.append_page(intro, tab_label)
+
+        tab_label = Gtk.Label()
+        tab_label.set_text("Список")
+
+        fig = Figure(figsize=(5, 4), dpi=100, constrained_layout=True)
+        self.ax = fig.add_subplot()
         self.line = None
 
-        color = (0.96, 0.96, 0.96)
-        self.fig.set_facecolor(color)
-        self.ax.set_facecolor(color)
-
-        sw = Gtk.ScrolledWindow(margin_top=10, margin_bottom=10,
-                            margin_start=10, margin_end=10)
-
-        self.set_child(sw)
-        self.ani = None
+        self.set_child(intro)
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, )
-        sw.set_child(vbox)
+        intro.set_child(vbox)
 
         box = Gtk.Box(spacing=5)
         vbox.append(box)
@@ -40,11 +48,6 @@ class Window(Gtk.ApplicationWindow):
         button_add_point.set_label("Добавить")
 
         button_add_point.connect('clicked', self.add_point)
-
-        button_show_anim = Gtk.Button()
-        button_show_anim.set_label("Анимация")
-
-        button_show_anim.connect('clicked', self.show_animated_plot)
 
         self.data = PlotData()
 
@@ -58,13 +61,34 @@ class Window(Gtk.ApplicationWindow):
         button_quit.set_label("Выйти")
         button_quit.connect('clicked', lambda x: app.quit())
 
-        controls = (button_add_point, self.edit_x, self.edit_y, button_quit, button_show_anim)
+        controls = (button_add_point, self.edit_x, self.edit_y, button_quit)
         for c in controls:
             box.append(c)
 
-        self.canvas = FigureCanvas(self.fig)
+        self.canvas = FigureCanvas(fig)
         self.canvas.set_size_request(800, 600)
         vbox.append(self.canvas)
+
+        self.notebook.append_page(view, tab_label)
+
+        view.show()
+
+        curr_page = 0
+
+        try:
+            with open("user_cache_dir.toml", "r") as f:
+                curr_page = int(*f)
+        except Exception:
+            pass
+
+        self.notebook.set_current_page(curr_page)
+
+        self.set_child(self.notebook)
+        self.show()
+
+        self.app = kwargs['application']
+
+        self.connect('close-request', self.handle_exit)
 
     def add_point(self, *args, **kwargs):
         self.data.add_point(self.edit_x.get_value(), self.edit_y.get_value())
@@ -74,39 +98,17 @@ class Window(Gtk.ApplicationWindow):
         self.line, = self.ax.plot(*self.data)
         self.canvas.draw()
 
-    def show_animated_plot(self, *args, **kwargs):
-        if self.is_anim_active:
-            self.ani.event_source.stop()
-            self.ax.cla()
-            self.ax.plot(*self.data)
-            self.canvas.draw()
-            self.is_anim_active = False
+    def handle_exit(self, _):
+        dialog = Confirmation()
+        dialog.set_transient_for(self)
+        dialog.show()
+        dialog.connect('response', self.exit)
+        return True
 
-        else:
-            t = np.linspace(0, 3, 40)
-            g = -9.81
+    def exit(self, widget, response):
+        with open("user_cache_dir.toml", "w") as f:
+            f.write(str(self.notebook.get_current_page()))
 
-            v0 = 12
-            z = g * t ** 2 / 2 + v0 * t
-
-            v02 = 5
-            z2 = g * t ** 2 / 2 + v02 * t
-
-            scat = self.ax.scatter(t[0], z[0], c="b", s=5)
-            line2 = self.ax.plot(t[0], z2[0])[0]
-
-            self.is_anim_active = True
-
-            def update(frame):
-                x = t[:frame]
-                y = z[:frame]
-                data = np.stack([x, y]).T
-                scat.set_offsets(data)
-                line2.set_xdata(t[:frame])
-                line2.set_ydata(z2[:frame])
-                return [scat, line2]
-
-            self.ani = animation.FuncAnimation(fig=self.fig, func=update, frames=40, interval=30)
-
-            self.canvas.draw()
-
+        if response == 1:
+            self.app.quit()
+        widget.destroy()
